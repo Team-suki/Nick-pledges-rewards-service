@@ -1,6 +1,6 @@
 import React from 'react';
 import SubHeading from '../Shared/SubHeading/SubHeading';
-import RewardList from './RewarsList.style';
+import RewardList from './RewardsList.style';
 
 export default (props) => {
   const { id, activated, rewardItems } = props;
