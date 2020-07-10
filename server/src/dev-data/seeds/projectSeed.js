@@ -79,8 +79,8 @@ const generateProjects = async (dbName, seedAmount) => {
     }
 
     /* Split the generator arrays into chunks - this avoid packet_size errors for large seed operations */
-    const projectChunks = _.chunk(projects, seedAmount / (seedAmount * 0.01));
-    const rewardChunks = _.chunk(rewards, rewards.length / (seedAmount * 0.01));
+    const projectChunks = _.chunk(projects, seedAmount / (seedAmount * 0.0001));
+    const rewardChunks = _.chunk(rewards, rewards.length / (seedAmount * 0.0001));
 
     /* Create a progress bar to notify the user of bulk creation progress */
     const creationBar = new ProgressBar(
