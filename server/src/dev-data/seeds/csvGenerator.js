@@ -8,6 +8,9 @@ const cliProgress = require('cli-progress');
  * Generate Projects csv
  */
 
+/* Require the generators for mock data */
+const { generateMockCSVReward } = require('./generator');
+
 // our stream that will be passed as the first argument for our generator function as 'writer'
 const writeProjects = fs.createWriteStream('projects.csv');
 // write our CSV headers
@@ -16,10 +19,11 @@ writeProjects.write('projectID, rewardID, title, creator, subtitle, category, su
 const multibar = new cliProgress.MultiBar({ clearOnComplete: false, hideCursor: true }, cliProgress.Presets.rect);
 
 function writeTenMillionProjects(writer, encoding, callback) {
-  let numOfRecords = 10000000
+  const numOfRecords = 10000000;
   //Start CLI progress bar
   const pBar = multibar.create(numOfRecords, 0);
-  // const rBar = multibar.create(null, 0);
+  // const rBar = multibar.create(numOfRecords * (minRewards + maxRewards / 2), 0);
+
   let i = numOfRecords; // 9999999
   let projectID = 0; // 1
   let rewardID = 0; // 1
@@ -36,50 +40,30 @@ function writeTenMillionProjects(writer, encoding, callback) {
       // if projectID is between 9 -10  # 6-7 rewards
 
       // inner loop for project rewards (related records)
-      const randomNumRewards = random.int(3, 6);
       // if projectID is > 6 mil randomNumRewards += 2
       // if projectID is > 9 mil randomNumRewards += 2
-
+      const minRewards = 3;
+      const maxRewards = 6;
+      const randomNumRewards = random.int(minRewards, maxRewards);
 
       // this is the last time!
       if (i === 0) {
-        writer.write(data, encoding, callback);
+        const newReward = generateMockCSVReward(projectID, rewardID);
+        const endTime = new Date().getTime();
+        const elapsed = (((endTime - startTime) / 1000) / 60).toFixed(3);
+        writer.write(newReward, encoding, callback);
+        writer.on('finish', () => {
+          console.log(`🏁\nFinished writing ${projectID} primary and ${rewardID} related records to CSV in ${elapsed} minutes \n🏁`);
+        });
+        // pBar.increment(); // <- progress bar
       } else {
         for (let j = 0; j <= randomNumRewards; j++)  {
           rewardID += 1;
-
-          // rewards bar
-          // rBar.setTotal(j, 0);
-
-          // stage our faker data
-          const title = faker.commerce.productName();
-          const pledgeAmount = Math.floor(faker.finance.amount());
-          const description = faker.lorem.paragraph().substring(0, 200);
-          const deliveryMonth = faker.date.month();
-          const deliveryYear = faker.date.future().getFullYear();
-          const shippingType = faker.company.bsAdjective();
-          const rewardQuantity = Math.floor(Math.random() * (500 - 1 + 1)) + 1;
-          const timeLimit = faker.random.number();
-          const projectId = faker.random.number();
-          const rewardItems = Array.from({ length: random.int(1, 6) }, () =>
-            faker.commerce.product()
-          ).join(',')
-          // format each CSV line
-          var data = `${projectID}, ${rewardID}, ${title},
-          ${pledgeAmount},
-          ${description},
-          ${deliveryMonth},
-          ${deliveryYear},
-          ${shippingType},
-          ${rewardQuantity},
-          ${timeLimit},
-          ${projectId},
-          ${rewardItems}\n`;
+          const newReward = generateMockCSVReward(projectID, rewardID);
           // See if we should continue, or wait.
           // Don't pass the callback, because we're not done yet
+          ok = writer.write(newReward, encoding);
           // rBar.increment(); // <- progress bar
-          ok = writer.write(data, encoding);
-          pBar.updateETA();
         }
       }
     }
@@ -94,10 +78,7 @@ function writeTenMillionProjects(writer, encoding, callback) {
 
 // invoke the function with a callback telling the write to end
 const startTime = new Date().getTime();
-writeTenMillionProjects(writeProjects, 'utf-8', () => {
-  const endTime = new Date().getTime();
-  const elapsed = (((endTime - startTime) / 1000) / 60).toFixed(3);
+writeTenMillionProjects(writeProjects, 'utf-8', (totalProjects, totalRewards) => {
   multibar.stop();
-  console.log(`Finished writing all projects and rewards to CSV in ${elapsed} minutes`);
   writeProjects.end();
 })
