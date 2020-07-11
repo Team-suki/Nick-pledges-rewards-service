@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "seed:database": "node --max-old-space-size=7168 src/dev-data/seeds/projectSeed.js",
-    "generate:data": "node --max-old-space-size=7168 src/dev-data/seeds/csvGenerator.js",
+    "generate:data": "node src/dev-data/seeds/csvGenerator.js",
     "start": "nodemon --max-old-space-size=4096 src/index.js"
   },
   "dependencies": {
@@ -28,8 +28,9 @@
     "helmet": "^3.23.1",
     "lodash": "^4.17.15",
     "mysql2": "^2.1.0",
+    "pg": "^8.3.0",
     "random": "^2.2.0",
-    "sequelize": "^5.21.13",
+    "sequelize": "^5.22.3",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
