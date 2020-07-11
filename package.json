@@ -29,7 +29,9 @@
     "seed:database": "node server/src/dev-data/seeds/projectSeed.js --docker",
     "start:database": "npm run seed:database && npm run start"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cli-progress": "^3.8.2"
+  },
   "devDependencies": {
     "concurrently": "^5.2.0",
     "gulp": "^4.0.2"
