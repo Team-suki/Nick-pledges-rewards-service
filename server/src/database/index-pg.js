@@ -7,7 +7,7 @@ const pool = new Pool()
 pool.query('SELECT NOW()', (err, res) => {
   console.log(err, res)
   pool.end()
-})
+});
 
 pool.query('CREATE TABLE SDCkickstarter')
 
