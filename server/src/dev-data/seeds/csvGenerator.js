@@ -19,6 +19,7 @@ writeProjects.write('rewardID,title,pledgeAmount,description,deliveryMonth,deliv
 const multibar = new cliProgress.MultiBar({ clearOnComplete: false, hideCursor: true }, cliProgress.Presets.rect);
 
 function writeTenMillionProjects(writer, encoding, callback) {
+
   const numOfRecords = 10000000;
   //Start CLI progress bar
   const pBar = multibar.create(numOfRecords, 0);
@@ -34,7 +35,6 @@ function writeTenMillionProjects(writer, encoding, callback) {
       i -= 1;
       projectID += 1;
       pBar.increment();
-
       // if projectID is between 1 -6 #1 reward
       // if projectID is between 6 -9  #1-3 rewards
       // if projectID is between 9 -10  # 6-7 rewards
@@ -59,6 +59,7 @@ function writeTenMillionProjects(writer, encoding, callback) {
       } else {
         for (let j = 0; j <= randomNumRewards; j++)  {
           rewardID += 1;
+
           const newReward = generateMockCSVReward(projectID, rewardID);
           // See if we should continue, or wait.
           // Don't pass the callback, because we're not done yet
