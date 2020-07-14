@@ -39,7 +39,7 @@ module.exports.generateMockReward = () => ({
   shippingType: faker.company.bsAdjective(),
   rewardQuantity: Math.floor(Math.random() * (500 - 1 + 1)) + 1,
   timeLimit: faker.random.number(),
-  projectId: faker.random.number(),
+  randomId: faker.random.number(),
   rewardItems: Array.from({ length: random.int(1, 6) }, () =>
     faker.commerce.product()
   ).join(',')

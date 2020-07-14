@@ -11,12 +11,12 @@ const cliProgress = require('cli-progress');
 // our stream that will be passed as the first argument for our generator function as 'writer'
 const writeProjects = fs.createWriteStream('projects.csv');
 // write our CSV headers
-writeProjects.write('projectID, rewardID, title, creator, subtitle, category, subcategory, location, heroImage, heroVideo, launchDate, campaignDuration, budget, fundingGoal,\n', 'utf8');
+writeProjects.write('rewardID,title,pledgeAmount,description,deliveryMonth,deliveryYear,shippingType,rewardQuantity,timeLimit,randomId,rewardItems\n','utf8');
 
 const multibar = new cliProgress.MultiBar({ clearOnComplete: false, hideCursor: true }, cliProgress.Presets.rect);
 
 function writeTenMillionProjects(writer, encoding, callback) {
-  let numOfRecords = 10000000
+  let numOfRecords = 100
   //Start CLI progress bar
   const pBar = multibar.create(numOfRecords, 0);
   // const rBar = multibar.create(null, 0);
@@ -30,7 +30,6 @@ function writeTenMillionProjects(writer, encoding, callback) {
       i -= 1;
       projectID += 1;
       pBar.increment();
-
       // if projectID is between 1 -6 #1 reward
       // if projectID is between 6 -9  #1-3 rewards
       // if projectID is between 9 -10  # 6-7 rewards
@@ -60,21 +59,12 @@ function writeTenMillionProjects(writer, encoding, callback) {
           const shippingType = faker.company.bsAdjective();
           const rewardQuantity = Math.floor(Math.random() * (500 - 1 + 1)) + 1;
           const timeLimit = faker.random.number();
-          const projectId = faker.random.number();
+          const randomId = faker.random.number();
           const rewardItems = Array.from({ length: random.int(1, 6) }, () =>
             faker.commerce.product()
           ).join(',')
           // format each CSV line
-          var data = `${projectID}, ${rewardID}, ${title},
-          ${pledgeAmount},
-          ${description},
-          ${deliveryMonth},
-          ${deliveryYear},
-          ${shippingType},
-          ${rewardQuantity},
-          ${timeLimit},
-          ${projectId},
-          ${rewardItems}\n`;
+          var data = `${rewardID},${title},${pledgeAmount},${description},${deliveryMonth},${deliveryYear},${shippingType},${rewardQuantity},${timeLimit},${randomId},${"{"}${rewardItems}${"}"}\n`;
           // See if we should continue, or wait.
           // Don't pass the callback, because we're not done yet
           // rBar.increment(); // <- progress bar
