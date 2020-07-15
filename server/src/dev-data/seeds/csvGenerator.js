@@ -14,13 +14,13 @@ const { generateMockCSVReward } = require('./generator');
 // our stream that will be passed as the first argument for our generator function as 'writer'
 const writeProjects = fs.createWriteStream('projects.csv');
 // write our CSV headers
-writeProjects.write('rewardID,title,pledgeAmount,description,deliveryMonth,deliveryYear,shippingType,rewardQuantity,timeLimit,randomId,rewardItems\n','utf8');
+writeProjects.write('rewardID;title;pledgeAmount;description;deliveryMonth;deliveryYear;shippingType;rewardQuantity;timeLimit;randomId;rewardItems\n','utf8');
 
 const multibar = new cliProgress.MultiBar({ clearOnComplete: false, hideCursor: true }, cliProgress.Presets.rect);
 
 function writeTenMillionProjects(writer, encoding, callback) {
 
-  const numOfRecords = 10000000;
+  const numOfRecords = 100;
   //Start CLI progress bar
   const pBar = multibar.create(numOfRecords, 0);
   // const rBar = multibar.create(numOfRecords * (minRewards + maxRewards / 2), 0);
