@@ -47,10 +47,34 @@ module.exports.generateMockReward = () => ({
 
 /**
  * Generate Mock CSV Reward
- * Creates a fake reward object to be used in seeding the database
+ * Creates a fake reward csv to be used in seeding the database
  * @returns
  */
-module.exports.generateMockCSVReward = (projectID, rewardID) => {
+module.exports.generateMockCSVRewardMongo = (projectID, rewardID) => {
+  // stage our faker data
+  const title = faker.commerce.productName();
+  const pledgeAmount = Math.floor(faker.finance.amount());
+  const description = faker.lorem.paragraph().substring(0, 200);
+  const deliveryMonth = faker.date.month();
+  const deliveryYear = faker.date.future().getFullYear();
+  const shippingType = faker.company.bsAdjective();
+  const rewardQuantity = Math.floor(Math.random() * (500 - 1 + 1)) + 1;
+  const timeLimit = faker.random.number();
+  const randomId = faker.random.number();
+  const rewardItems = Array.from({ length: random.int(1, 6) }, () =>
+    faker.commerce.product()
+  ).join(',')
+  // format each CSV line ${projectID};
+  return `${rewardID},${title},${pledgeAmount},${description},${deliveryMonth},${deliveryYear},${shippingType},${rewardQuantity},${timeLimit},${randomId},` + "[" + rewardItems + "]" + `\n`;
+
+};
+
+/**
+ * Generate Mock CSV Reward (SemiColon Delimiter for PostGres)
+ * Creates a fake reward csv to be used in seeding the database
+ * @returns
+ */
+module.exports.generateMockCSVRewardPostgres = (projectID, rewardID) => {
   // stage our faker data
   const title = faker.commerce.productName();
   const pledgeAmount = Math.floor(faker.finance.amount());
@@ -68,3 +92,4 @@ module.exports.generateMockCSVReward = (projectID, rewardID) => {
   return `${rewardID};${title};${pledgeAmount};${description};${deliveryMonth};${deliveryYear};${shippingType};${rewardQuantity};${timeLimit};${randomId};` + "{" + rewardItems + "}" + `\n`;
 
 };
+
