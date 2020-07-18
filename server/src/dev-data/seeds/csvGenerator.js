@@ -9,14 +9,14 @@ const cliProgress = require('cli-progress');
  */
 
 /* Require the generators for mock data */
-const { generateMockCSVReward } = require('./generator');
+const { generateMockCSVRewardMongo, generateMockCSVRewardPostgres  } = require('./generator');
 
 // our stream that will be passed as the first argument for our generator function as 'writer'
-const writeProjects = fs.createWriteStream('projects.csv');
+const writeProjects = fs.createWriteStream('test.csv');
 // write our CSV headers
-const postgresHeader = `rewardID;title;pledgeAmount;description;deliveryMonth;deliveryYear;shippingType;rewardQuantity;timeLimit;randomId;rewardItems\n','utf8`
-const mongoHeader = `rewardID,title,pledgeAmount,description,deliveryMonth,deliveryYear,shippingType,rewardQuantity,timeLimit,randomId,rewardItems\n','utf8`
-writeProjects.write(postgresHeader);
+const postgres = `rewardID;projectID;title;pledgeAmount;description;deliveryMonth;deliveryYear;shippingType;rewardQuantity;timeLimit;randomId;rewardItems\n`
+const mongoDB = `_id,rewardID,title,pledgeAmount,description,deliveryMonth,deliveryYear,shippingType,rewardQuantity,timeLimit,randomId,rewardItems\n`
+writeProjects.write(mongoDB);
 
 const multibar = new cliProgress.MultiBar({ clearOnComplete: false, hideCursor: true }, cliProgress.Presets.rect);
 
@@ -50,7 +50,7 @@ function writeTenMillionProjects(writer, encoding, callback) {
 
       // this is the last time!
       if (i === 0) {
-        const newReward = generateMockCSVReward(projectID, rewardID);
+        const newReward = generateMockCSVRewardMongo(projectID, rewardID);
         const endTime = new Date().getTime();
         const elapsed = (((endTime - startTime) / 1000) / 60).toFixed(3);
         writer.write(newReward, encoding, callback);
@@ -62,7 +62,7 @@ function writeTenMillionProjects(writer, encoding, callback) {
         for (let j = 0; j <= randomNumRewards; j++)  {
           rewardID += 1;
 
-          const newReward = generateMockCSVReward(projectID, rewardID);
+          const newReward = generateMockCSVRewardMongo(projectID, rewardID);
           // See if we should continue, or wait.
           // Don't pass the callback, because we're not done yet
           ok = writer.write(newReward, encoding);

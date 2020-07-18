@@ -9,12 +9,13 @@ const { getDaysBetween } = require('../../utils/manipulateDate');
  *   title: *, category: (*), subcategory: *, fundingGoal: number, rewards: number[], budget: number}}
  */
 module.exports.generateMockProject = () => ({
-  title: faker.commerce.productName(),
-  creator: faker.internet.userName(),
+  // will need a projectID
+  title: faker.commerce.productName(), // maybe?
+  creator: faker.internet.userName(), // need this
   subtitle: faker.company.catchPhrase(),
   category: faker.commerce.department(),
   subcategory: faker.commerce.productAdjective(),
-  location: faker.fake('{{address.city}}, {{address.stateAbbr}}'),
+  location: faker.fake('{{address.city}}, {{address.stateAbbr}}'), // need this
   heroImage: faker.image.image(),
   heroVideo: 'https://ytroulette.com/',
   launchDate: faker.date.future().toString(),
@@ -36,10 +37,10 @@ module.exports.generateMockReward = () => ({
   description: faker.lorem.paragraph().substring(0, 200),
   deliveryMonth: faker.date.month(),
   deliveryYear: faker.date.future().getFullYear(),
-  shippingType: faker.company.bsAdjective(),
-  rewardQuantity: Math.floor(Math.random() * (500 - 1 + 1)) + 1,
-  timeLimit: faker.random.number(),
-  randomId: faker.random.number(),
+  shippingType: faker.company.bsAdjective(), // optional?
+  rewardQuantity: Math.floor(Math.random() * (500 - 1 + 1)) + 1, // # of backers
+  timeLimit: faker.random.number(), // optional?
+  randomId: faker.random.number(), // Where is this used?
   rewardItems: Array.from({ length: random.int(1, 6) }, () =>
     faker.commerce.product()
   ).join(',')
@@ -61,11 +62,12 @@ module.exports.generateMockCSVRewardMongo = (projectID, rewardID) => {
   const rewardQuantity = Math.floor(Math.random() * (500 - 1 + 1)) + 1;
   const timeLimit = faker.random.number();
   const randomId = faker.random.number();
-  const rewardItems = Array.from({ length: random.int(1, 6) }, () =>
-    faker.commerce.product()
-  ).join(',')
+  // const rewardItems = Array.from({ length: random.int(1, 6) }, () =>
+  //   faker.commerce.product()
+  // ).join(',')
   // format each CSV line ${projectID};
-  return `${rewardID},${title},${pledgeAmount},${description},${deliveryMonth},${deliveryYear},${shippingType},${rewardQuantity},${timeLimit},${randomId},` + "[" + rewardItems + "]" + `\n`;
+  return `${rewardID},${projectID},${title},${pledgeAmount},${description},${deliveryMonth},${deliveryYear},${shippingType},${rewardQuantity},${timeLimit},${randomId},` + "[" + "rewardItems" + "]" + `\n`;
+  // return `${rewardID};${title};${pledgeAmount};${description};${deliveryMonth};${deliveryYear};${shippingType};${rewardQuantity};${timeLimit};${randomId};` + "[" + rewardItems + "]" + `\n`;
 
 };
 
