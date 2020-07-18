@@ -62,6 +62,7 @@ module.exports.generateMockCSVRewardMongo = (projectID, rewardID) => {
   const rewardQuantity = Math.floor(Math.random() * (500 - 1 + 1)) + 1;
   const timeLimit = faker.random.number();
   const randomId = faker.random.number();
+
   // const rewardItems = Array.from({ length: random.int(1, 6) }, () =>
   //   faker.commerce.product()
   // ).join(',')
@@ -92,6 +93,3 @@ module.exports.generateMockCSVRewardPostgres = (projectID, rewardID) => {
   ).join(',')
   // format each CSV line ${projectID};
   return `${rewardID};${title};${pledgeAmount};${description};${deliveryMonth};${deliveryYear};${shippingType};${rewardQuantity};${timeLimit};${randomId};` + "{" + rewardItems + "}" + `\n`;
-
-};
-
