@@ -199,3 +199,4 @@ dist
 
 # config
 .env
+.connect.js

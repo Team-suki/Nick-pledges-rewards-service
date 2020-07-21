@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "seed:database": "node --max-old-space-size=7168 src/dev-data/seeds/projectSeed.js",
-    "generate:data": "node src/dev-data/seeds/csvGenerator.js",
+    "generate:rewards": "node src/dev-data/seeds/csvGenerator.js",
+    "generate:projects": "node src/dev-data/seeds/csvGeneratorProject.js",
     "start": "nodemon --max-old-space-size=4096 src/index.js"
   },
   "dependencies": {

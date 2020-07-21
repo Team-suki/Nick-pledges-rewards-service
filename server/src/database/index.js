@@ -2,6 +2,9 @@
 const Sequelize = require('sequelize');
 const mysql = require('mysql2/promise');
 
+// add postgres
+const pg = require('pg');
+
 /* Import Models */
 const Project = require('../models/projectModel');
 const Reward = require('../models/rewardModel');
@@ -26,30 +29,30 @@ const createSequelizeConnection = () => {
   return new Promise((resolve, reject) => {
     /* Connect with base MySQL2 package and creat ethe database if it doesn't exist */
     const {
-      DATABASE_NAME,
-      DATABASE_USER,
-      DATABASE_PASSWORD,
-      DATABASE_HOST
+      PGDATABASE,
+      PGUSER,
+      PGPASSWORD,
+      PGHOST
     } = process.env;
 
-    mysql
+    pg
       .createConnection({
-        user: DATABASE_USER,
-        password: DATABASE_PASSWORD,
-        host: DATABASE_HOST
+        user: PGUSER,
+        password: PGPASSWORD,
+        host: PGHOST
       })
       .then((sqlRoot) => {
         sqlRoot
-          .query(`CREATE DATABASE IF NOT EXISTS ${DATABASE_NAME};`)
+          .query(`CREATE DATABASE IF NOT EXISTS ${PGDATABASE};`)
           .then(() => {
             // Connect to MySQL Database
             const connection = new Sequelize(
-              DATABASE_NAME,
-              DATABASE_USER,
-              DATABASE_PASSWORD,
+              PGDATABASE,
+              PGUSER,
+              PGPASSWORD,
               {
                 host: DATABASE_HOST,
-                dialect: 'mysql',
+                dialect: 'postgres',
                 logging: false,
                 pool: {
                   max: 5,

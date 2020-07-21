@@ -12,9 +12,11 @@ const cliProgress = require('cli-progress');
 const { generateCSVReward, generateCSVProject  } = require('./generator');
 
 // our stream that will be passed as the first argument for our generator function as 'writer'
-const writeProjects = fs.createWriteStream('rewards.csv');
+const writeProjects = fs.createWriteStream('projects.csv');
 // write our CSV headers
-const postgres = `reward_id,project_id,title,pledge_amount,reward_description,delivery_month,delivery_year,reward_quantity,time_limit,random_id,reward_items\n`
+//  return `${project_id},${title},${creator},${location}`;
+const postgres = `project_id,title,creator,location\n`
+
 writeProjects.write(postgres);
 
 const multibar = new cliProgress.MultiBar({ clearOnComplete: false, hideCursor: true }, cliProgress.Presets.rect);
@@ -29,55 +31,36 @@ function writeTenMillionProjects(writer, encoding, callback) {
   let i = numOfRecords; // 9999999
   let project_id = 0; // 1
   let reward_id = 0; // 1
+  write();
   function write() {
     let ok = true;
     // outer loop for projects (primary record)
-    while (i > 0 && ok) {
+    do {
       i -= 1;
       project_id += 1;
       pBar.increment();
-      // if project_id is between 1 -6 #1 reward
-      // if project_id is between 6 -9  #1-3 rewards
-      // if project_id is between 9 -10  # 6-7 rewards
-
-      // inner loop for project rewards (related records)
-      // if project_id is > 6 mil randomNumRewards += 2
-      // if project_id is > 9 mil randomNumRewards += 2
-      const minRewards = 3;
-      const maxRewards = 6;
-      const randomNumRewards = random.int(minRewards, maxRewards);
-
+      const newProject = generateCSVProject(project_id);
       // this is the last time!
       if (i === 0) {
-        for (let j = 0; j <= randomNumRewards; j++)  {
-          reward_id += 1;
-          const newReward = generateCSVReward(reward_id, project_id);
-          writer.write(newReward, encoding, callback);
-        }
+        const newProject = generateCSVProject(project_id);
         const endTime = new Date().getTime();
         const elapsed = (((endTime - startTime) / 1000) / 60).toFixed(3);
+        writer.write(newProject, encoding, callback);
         writer.on('finish', () => {
           console.log(`🏁\nFinished writing ${project_id} primary and ${reward_id} related records to CSV in ${elapsed} minutes \n🏁`);
         });
       } else {
-        for (let j = 0; j <= randomNumRewards; j++)  {
-          reward_id += 1;
-
-          const newReward = generateCSVReward(reward_id, project_id);
-          // See if we should continue, or wait.
-          // Don't pass the callback, because we're not done yet
-          ok = writer.write(newReward, encoding);
-          // rBar.increment(); // <- progress bar
-        }
+        // See if we should continue, or wait.
+        // Don't pass the callback, because we're not done yet
+        ok = writer.write(newProject, encoding);
       }
-    }
+    } while (i > 0 && ok);
     if (i > 0) {
       // had to stop early!
       // write some more once it drains
       writer.once('drain', write);
     }
   }
-  write();
 }
 
 // invoke the function with a callback telling the write to end

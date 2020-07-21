@@ -22,6 +22,7 @@ const pluck = (req) => (param) => {
  * @returns {*} None
  */
 module.exports = (req, res, next) => {
+  console.log('paramPluck Query:',req.query)
   if (_.isEmpty(req.query)) {
     // No parameters were passed in - return response of 400
     return res
@@ -31,6 +32,7 @@ module.exports = (req, res, next) => {
 
   /* If the project ID query param exists but is empty, return an empty array*/
   if (req.query.projectId === '') {
+    console.log('project ID query param exists but is empty')
     return res.status(200).json([]);
   }
 
@@ -39,7 +41,9 @@ module.exports = (req, res, next) => {
   replace('id');
   replace('name');
   replace('projectId');
+  // replace('project_id');
   replace('rewardId');
+  // replace('reward_id');
 
   next();
 };
