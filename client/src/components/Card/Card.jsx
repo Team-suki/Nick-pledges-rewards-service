@@ -25,33 +25,33 @@ const Card = (props) => {
   const [activated, setActivated] = useState(false);
 
   const { reward } = props;
-  const {
-    id,
-    title,
-    pledgeAmount,
-    description,
-    deliveryMonth,
-    deliveryYear,
-    rewardQuantity,
-    rewardItems,
-  } = reward;
+  // const {
+  //   id,
+  //   title,
+  //   pledge_amount,
+  //   description,
+  //   delivery_month,
+  //   delivery_year,
+  //   reward_quantity,
+  //   reward_items,
+  // } = reward;
 
-  const currencyConverted = Math.floor(pledgeAmount * 0.8);
+  const currencyConverted = Math.floor(reward.pledge_amount * 0.8);
 
   /* Return the JSX to render */
   return (
     <Container activated={activated}>
       <Overlay activated={activated} setActivated={setActivated} />
-      <Heading>{`Pledge $${pledgeAmount} or more`}</Heading>
+      <Heading>{`Pledge $${reward.pledge_amount} or more`}</Heading>
       <SubHeading uppercase>{`About £${currencyConverted}`}</SubHeading>
-      <Title uppercase>{title}</Title>
+      <Title uppercase>{reward.title}</Title>
       <Description
         descOpen={descOpen}
         activated={activated}
         setDescOpen={setDescOpen}
-        description={description}
+        description={reward.description}
       />
-      <RewardList id={id} activated={activated} rewardItems={rewardItems} />
+      <RewardList id={reward.id} activated={activated} rewarditems={reward.reward_items} />
       <SplitContainer>
         <div>
           <SubHeading uppercase>
@@ -60,7 +60,7 @@ const Card = (props) => {
             delivery
           </SubHeading>
           <SmallTitle uppercase={false}>
-            {`${deliveryMonth.substring(0, 3)} ${deliveryYear}`}
+            {`${reward.delivery_month.substring(0, 3)} ${reward.delivery_year}`}
           </SmallTitle>
         </div>
         <div>
@@ -69,7 +69,7 @@ const Card = (props) => {
         </div>
       </SplitContainer>
       <BackerHeading activated={activated}>
-        {`${rewardQuantity} Backers`}
+        {`${reward.reward_quantity} Backers`}
       </BackerHeading>
       <PledgeForm activated={activated} />
     </Container>
