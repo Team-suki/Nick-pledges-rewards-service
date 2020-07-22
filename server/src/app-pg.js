@@ -1,5 +1,6 @@
 require('newrelic');
 const path = require('path');
+const cors = require('cors')
 const express = require('express');
 const db = require('./database/index-pg');
 const paramPluck = require("./middleware/paramPluck");
@@ -14,7 +15,8 @@ const app = express();
 // Allow the app to use the body-parser middleware so we can accept JSON body data"No query parameters were provided in the request"
 app.use(express.json());
 
-
+// enable CORS for making requests to other services
+app.use(cors())
 
 
 // projects
