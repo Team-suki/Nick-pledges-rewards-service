@@ -200,6 +200,11 @@ dist
 # config
 .env
 .config.js
+config/
 
 #newrelic
 .newrelic.js
+
+# aws key
+*.pem
+
