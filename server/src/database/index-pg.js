@@ -1,6 +1,6 @@
 // const path = require("path");
 // require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
-const { connectionString } = require('./../config/connect.js')
+const { connectionString } = require('./../config/config.js')
 
 const { Pool } = require('pg');
 
