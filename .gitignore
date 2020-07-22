@@ -203,7 +203,7 @@ dist
 config/
 
 #newrelic
-.newrelic.js
+.src/newrelic.js
 
 # aws key
 *.pem
